@@ -1,0 +1,46 @@
+import requests
+import xml.etree.ElementTree as ET
+
+def loadRSS( url ):
+    # create HTTP request response object
+    response = requests.get( url )
+
+    # return response content
+    return response.content
+
+def parseXML(rss):
+    ''' 
+    utility function to parse XML format rss feed 
+    '''
+    # create element tree root object 
+    root = ET.fromstring(rss) 
+  
+    newsitems = [] 
+  
+    # iterate news items
+    for item in root.findall('./channel/item'): 
+        news = {} 
+  
+        # iterate child elements of item 
+        for child in item: 
+  
+            # special checking for namespace object content:media 
+            if child.tag == '{http://search.yahoo.com/mrss/}content':
+                news['media'] = child.attrib['url'] 
+            else: 
+                news[child.tag] = child.text #.encode('utf8') 
+        newsitems.append(news) 
+  
+    # return news items list with BINARY data
+    return newsitems
+  
+def topStories( URL ): 
+    ''' 
+    main function to generate and return news items 
+    '''
+    # load rss feed 
+    rss = loadRSS( URL ) 
+  
+    # parse XML 
+    newsitems = parseXML(rss) 
+    return newsitems

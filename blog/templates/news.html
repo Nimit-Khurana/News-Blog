@@ -1,152 +1,54 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <title>News</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
-
-    <!-- Favicons -->
-    <link href="{% static 'img/title.png' %}" rel="icon">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
-
-
-
-    <!-- Main Stylesheet File -->
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-    <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-
-
-
-    <!-- =======================================================
-    CUSTOM style sheet
-  ======================================================= -->
-    <link href="{% static 'css/dom_manipulation.css' %}" rel="stylesheet">
-    <!-- =======================================================
-    AJAX request section
-  ======================================================= -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
-    </script>
-
-</head>
-<style>
-    body {
-        background-image:url("{% static 'img/paper.jpg' %}");
-        font-family: "Montserrat", sans-serif;
-    }
-    
-    #main {
-        background-color: white;
-        margin-top: 140px;
-        overflow: auto;
-    }
-    
-    .main-container {
-        border-radius: 5px;
-        padding: 20px;
-        width: 60%;
-        float: left;
-    }
-    
-    .newsgif {
-        float: left;
-        width: 30%;
-    }
-    
-    .form {
-        margin: 5px;
-        padding: 8px;
-        font-size: 20px;
-        display: inline-block;
-        float: left;
-    }
-    
-    .form {
-        margin: inherit;
-    }
-    
-    #overlay {
-        position: fixed;
-        display: none;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 2;
-        cursor: pointer;
-    }
-    
-    #refresh {
-        background-color: Transparent;
-        border: none;
-        cursor: pointer;
-        overflow: hidden;
-        outline: none;
-        padding: 10px;
-        width: auto;
-        color: #4CAF50;
-        text-decoration: none;
-        float: right;
-    }
-    
-    .right-float {
-        float: right;
-    }
-</style>
-
-<body>
-
-    <header id="header">
-        <div class="container-fluid">
-
-            <div id="logo" class="pull-left">
-                <h1><a href="#intro" class="scrollto">NEWS</a></h1>
-            </div>
-            <div>
-                <a href="#" id="refresh">Refresh</a>
-            </div>
-
-        </div>
-    </header>
-
-    <div id="main">
-        <div class="newsgif">
-            <img src="{% static 'img/newspaper.gif'%}">
-            <br>
-            <strong style="margin:20px;">Save Your favourite articles.</strong>
-        </div>
-        <div class="main-container">
-            <form action="/action_page.php">
-                <div class="row">
-                    <div class="col-25">
-                        <label for="fname">Title</label>
-                    </div>
-                    <div class="col-75">
-                        <input type="text" id="fname" name="firstname" placeholder="Title">
-                    </div>
+{% extends "base.html" %} {% load static %} {%block nav%}
+<nav id="nav-menu-container">
+    <ul class="nav-menu">
+        <li><a href="#" id="refresh">Refresh</a></li>
+        <li>
+            <form id="news-form" action="{%url 'news'%}">
+                {% csrf_token %}
+                <select id="option" name="option">
+                    <option disabled="true" selected>--newspaper--</option>
+                    <option>hindu_national</option>
+                    <option>hindu_international</option>
+                    <option>toi_national</option>
+                    <option>toi_international</option>
+                    <option>hindustan_times</option>
+                </select>
+                <input id="submit" type="submit" value="Submit">
+            </form>
+        </li>
+    </ul>
+</nav>
+{%endblock%} {% block main_form %}
+<div id="main">
+    <div class="newsgif">
+        <img src="{% static 'img/newspaper.gif'%}">
+        <br>
+        <strong style="margin:20px;">Save Your favourite articles.</strong>
+    </div>
+    <div class="main-container">
+        <form action="/action_page.php">
+            <div class="row">
+                <div class="col-25">
+                    <label for="fname">Title</label>
                 </div>
-                <div class="row">
-                    <div class="col-25">
-                        <label for="lname">URL</label>
-                    </div>
-                    <div class="col-75">
-                        <input type="text" id="lname" name="lastname" placeholder="Paste URL here">
-                    </div>
+                <div class="col-75">
+                    <input type="text" id="fname" name="firstname" placeholder="Title">
                 </div>
-                <div class="row">
-                    <div class="col-25">
-                        <label for="category">Category</label>
-                    </div>
-                    <div class="col-75">
-                        <select id="category" name="category">
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="lname">URL</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="lname" name="lastname" placeholder="Paste URL here">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label for="category">Category</label>
+                </div>
+                <div class="col-75">
+                    <select id="category" name="category">
               <option value="general">General</option>
               <option value="business">Business</option>
               <option value="sports">Sports</option>
@@ -155,66 +57,20 @@
               <option value="health">Health</option>
               <option value="entertainment">Entertainment</option>
             </select>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-25">
-                        <label for="subject">Publish Date(yyyy-mm-dd)</label>
-                    </div>
-                    <div class="col-75">
-                        <input type="text" id="lname" name="lastname" placeholder="Published date">
-                    </div>
-                </div>
-                <div class="row">
-                    <input type="submit" value="Save">
-                </div>
-            </form>
-        </div>
-    </div>
-    <br>
-    <section id="about">
-        <div class="container">
-            <header class="section-header">
-                <h3>About</h3>
-                <p>Get the top news in India instantly.</p>
-            </header>
-        </div>
-    </section>
-
-    <div id="div-news">{{ data|safe }}</div>
-
-    <br>
-
-    <footer id="footer">
-        <div class="footer-top">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-3 col-md-6 footer-info">
-                        <h3>Nimit Khurana</h3>
-                    </div>
-                    <div class="col-lg-3 col-md-6 footer-contact">
-                        <h4>Contact</h4>
-                        <p>
-                            <strong>Phone:</strong> +91 9501138443<br>
-                            <strong>Email:</strong> nimitkhuranaa@gmail.com<br>
-                        </p>
-                    </div>
-
-                </div>
-                <p>© Since 2019</p>
-                <p>Powered by newsapi.org</p>
             </div>
-        </div>
-    </footer>
-
-    <!-- Template Main Javascript File -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.1.0/jquery-migrate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/superfish/1.7.10/js/superfish.js"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-    <script language="JavaScript" type="text/javascript" src="{% static 'js/news_dm.js' %}"></script>
-</body>
-
-</html>
+            <div class="row">
+                <div class="col-25">
+                    <label for="subject">Publish Date(yyyy-mm-dd)</label>
+                </div>
+                <div class="col-75">
+                    <input type="text" id="lname" name="lastname" placeholder="Published date">
+                </div>
+            </div>
+            <div class="row">
+                <input type="submit" value="Save">
+            </div>
+        </form>
+    </div>
+</div>
+{%endblock%}
