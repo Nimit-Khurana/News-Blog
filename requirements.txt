@@ -27,7 +27,7 @@ importlib-metadata==0.23
 incremental==17.5.0
 jieba==0.39
 lockfile==0.12.2
-lxml==4.4.1
+lxml==4.6.3
 more-itertools==7.2.0
 msgpack==0.6.2
 mysqlclient==1.4.6
