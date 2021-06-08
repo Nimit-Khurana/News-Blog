@@ -37,7 +37,7 @@ packaging==19.2
 parsel==1.5.2
 pathspec==0.7.0
 pep517==0.6.0
-Pillow==6.2.1
+Pillow==8.2.0
 ply==3.11
 progress==1.5
 Protego==0.1.15
